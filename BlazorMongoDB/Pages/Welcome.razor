@@ -1,0 +1,17 @@
+@page "/"
+@inject NavigationManager NavigationManager
+
+<title>Formula editor</title>
+<h3>Vitajte v programe na editovanie tímov a jazdcov Formuly 1</h3>
+
+<p>Pre zobrazenie tímov kliknite na Teams viewer</p>
+<p>Pre zobrazenie jazdcov kliknite na Drivers viewer</p>
+<p>Pre úpravu jazdcov kliknite na Driver editor</p>
+<p>Pre úpravu tímov kliknite na Team editor</p>
+
+<RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="1rem" Wrap="FlexWrap.Wrap">
+    <RadzenButton Click=@(args => NavigationManager.NavigateTo("/teamsviewer")) Text="Teams viewer" ButtonStyle="ButtonStyle.Success" />
+    <RadzenButton Click=@(args => NavigationManager.NavigateTo("/driversviewer")) Text="Drivers viewer" ButtonStyle="ButtonStyle.Success" />
+    <RadzenButton Click=@(args => NavigationManager.NavigateTo("/deditor")) Text="Driver editor" ButtonStyle="ButtonStyle.Success" />
+    <RadzenButton Click=@(args => NavigationManager.NavigateTo("/teditor")) Text="Team editor" ButtonStyle="ButtonStyle.Success" />
+</RadzenStack>

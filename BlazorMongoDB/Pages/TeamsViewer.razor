@@ -1,0 +1,48 @@
+﻿@page "/teamsviewer"
+@using FormulaDatabase.Data
+@using FormulaDatabase.Handler
+@using FormulaDatabase.Service
+@inject FormulaDatabase.Abstracts.Service<FormulaTeam, Driver> teamService
+
+<title>Teams viewer</title>
+<h3>Teams viewer</h3>
+
+
+<RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false" FilterMode="FilterMode.Advanced" AllowSorting="true" PageSize="5" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
+                Data="@teams" ColumnWidth="150px" LogicalFilterOperator="LogicalFilterOperator.Or" SelectionMode="DataGridSelectionMode.Single" @bind-Value=@selectedTeams>
+    <Columns>
+        <RadzenDataGridColumn Title="Photo" Frozen="true" Sortable="false" Filterable="false" Width="80px" TextAlign="TextAlign.Center">
+            <Template Context="data">
+                <RadzenImage Path="@data.ImageUrl" class="rz-gravatar" AlternateText="@(data.FullTeamName)" />
+            </Template>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn Property="FullTeamName" Title="Full team name" Frozen="true" Width="70px" />
+        <RadzenDataGridColumn Property="Base" Title="Base" Width="70px" />
+        <RadzenDataGridColumn Property="TeamChief" Title="Team chief" Width="70px" />
+        <RadzenDataGridColumn Property="TechnicalChief" Title="Technical chief" Width="70px" />
+        <RadzenDataGridColumn Property="Chassis" Title="Chassis" Width="70px" />
+        <RadzenDataGridColumn Property="PowerUnit" Title="Power unit" Width="160px" />
+        <RadzenDataGridColumn Property="FirstTeamEntry" Title="First team entry" Width="70px" />
+        <RadzenDataGridColumn Property="WorldChampionships" Title="World championships" Width="70px" />
+        <RadzenDataGridColumn Property="HighestRaceFinish" Title="Highest race finish" Width="70px" />
+        <RadzenDataGridColumn Property="PolePositions" Title="Pole positions" Width="70px" />
+        <RadzenDataGridColumn Property="FastestLaps" Title="Fastest laps" Width="70px" />
+        <RadzenDataGridColumn Property="FirstDriver" Title="First driver" Width="70px" />
+        <RadzenDataGridColumn Property="SecondDriver" Title="Second driver" Width="70px" />
+        <RadzenDataGridColumn Property="ReserveDriver" Title="Reserve driver" Width="70px" />
+
+    </Columns>
+</RadzenDataGrid>
+
+@code {
+    IEnumerable<FormulaTeam> teams = null!;
+    IList<FormulaTeam> selectedTeams = null!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        teamService = new TeamService();
+        teams = teamService.GetAllObjects();
+        selectedTeams = new List<FormulaTeam>() { teams.FirstOrDefault()! };
+        await Task.CompletedTask;
+    }
+}

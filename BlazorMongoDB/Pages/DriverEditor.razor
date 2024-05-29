@@ -1,0 +1,266 @@
+@page "/deditor"
+@using FormulaDatabase.Data
+@using FormulaDatabase.Handler
+@using FormulaDatabase.Service
+@using FormulaDatabase.Abstracts
+@* @inject FormulaDatabase.IService.IService<Driver, FormulaTeam> driverService *@
+@inject FormulaDatabase.Abstracts.Service<Driver, FormulaTeam> driverService
+<title>Driver editor</title>
+<h3>Driver editor</h3>
+
+<div class="container-fluid">
+
+    <RadzenTemplateForm TItem="Driver" Data=@driver Submit="@(e => Save())">
+        <div class="row ml-0 pl-0">
+            <div class="col-md-2 p-3">
+                <RadzenCard>
+                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Èíslo jazdca:</RadzenText>
+                    <RadzenNumeric Min="0" Max="99" @bind-Value=@driver.RacingNumber Name="RacingNumber" InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "enter value" }})" />
+                    <RadzenRequiredValidator Component="RacingNumber" Text="" Popup=@true />
+                </RadzenCard>
+            </div>
+
+            <div class="col-md-2 p-3">
+                <RadzenCard>
+                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Zadaj celé meno:</RadzenText>
+                    <RadzenTextBox @bind-Value="driver.FullName" Name="FullName" class="w-100" aria-label="FullNameTextBox" />
+                    <RadzenRequiredValidator Component="FullName" Text="Napíš meno!" Popup=@true />
+                </RadzenCard>
+            </div>
+
+            <div class="col-md-2 p-3">
+                <RadzenCard>
+                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Vyber team:</RadzenText>
+                    <RadzenDropDown @bind-Value="driver.Team" Data=@teams TextProperty="FullTeamName" ValueProperty="FullTeamName" AllowClear=true Placeholder="Select team" Style="width: 100%; max-width: 400px;" Name="Team" />
+                    <RadzenRequiredValidator Component="Team" Text="Vyber team!" Popup=@true />
+                </RadzenCard>
+            </div>
+
+            <div class="col-md-2 p-3">
+                <RadzenCard>
+                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Krajina:</RadzenText>
+                    <RadzenTextBox @bind-Value="driver.Country" class="w-100" aria-label="CountryTextBox" Name="Country" />
+                    <RadzenRequiredValidator Component="Country" Text="Napíš krajinu!" Popup=@true />
+                </RadzenCard>
+            </div>
+
+            <div class="col-md-2 p-3">
+                <RadzenCard>
+                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Poèet pódii:</RadzenText>
+                    <RadzenNumeric Min="0" @bind-Value=@driver.Podiums Name="Podiums" InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "enter value" }})" />
+                    <RadzenRequiredValidator Component="Podiums" Text="Napíš poèet pódii!" Popup=@true />
+                </RadzenCard>
+            </div>
+
+            <div class="col-md-2 p-3">
+                <RadzenCard>
+                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Poèet bodov:</RadzenText>
+                    <RadzenNumeric Min="0" Placeholder="0.0" Step="0.1" @bind-Value=@driver.Points Name="Points" InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "enter value" }})" />
+                    <RadzenRequiredValidator Component="Points" Text="Napíš poèet bodov!" Popup=@true />
+                </RadzenCard>
+            </div>
+
+            <div class="col-md-2 p-3">
+                <RadzenCard>
+                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Poèet zúèastnených pretekov:</RadzenText>
+                    <RadzenNumeric Min="0" @bind-Value=@driver.GrandPrixEntered Name="GrandPrixEntered" InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "enter value" }})" />
+                    <RadzenRequiredValidator Component="GrandPrixEntered" Text="Napíš poèet pretekov!" Popup=@true />
+                </RadzenCard>
+            </div>
+
+            <div class="col-md-2 p-3">
+                <RadzenCard>
+                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Poèet majstrovstiev sveta:</RadzenText>
+                    <RadzenNumeric Min="0" @bind-Value=@driver.WorldChampionships Name="WorldChampionships" InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "enter value" }})" />
+                    <RadzenRequiredValidator Component="WorldChampionships" Text="Napíš poèet majstrovstiev sveta!" Popup=@true />
+                </RadzenCard>
+            </div>
+
+            <div class="col-md-2 p-3">
+                <RadzenCard>
+                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Najlepšie umiestnenie:</RadzenText>
+                    <RadzenNumeric Min="0" @bind-Value=@driver.HighestRaceFinish Name="HighestRaceFinish" InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "enter value" }})" />
+                    <RadzenRequiredValidator Component="HighestRaceFinish" Text="Napíš najlepšie umiestnenie" Popup=@true />
+                </RadzenCard>
+            </div>
+
+            <div class="col-md-2 p-3">
+                <RadzenCard>
+                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Poèet najlepších umiestnení:</RadzenText>
+                    <RadzenNumeric Min="0" @bind-Value=@driver.HighestRaceFinishHowManyTimes Name="HighestRaceFinishHowManyTimes" InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "enter value" }})" />
+                    <RadzenRequiredValidator Component="HighestRaceFinishHowManyTimes" Text="Napíš poèet najlepších umiestnení!" Popup=@true />
+                </RadzenCard>
+            </div>
+
+            <div class="col-md-2 p-3">
+                <RadzenCard>
+                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Najlepšie štart. miesto:</RadzenText>
+                    <RadzenNumeric Min="0" @bind-Value=@driver.HighestGridPosition Name="HighestGridPosition" InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "enter value" }})" />
+                    <RadzenRequiredValidator Component="HighestGridPosition" Text="Napíš najlepšie štartovné miesto!" Popup=@true />
+                </RadzenCard>
+            </div>
+
+            <div class="col-md-2 p-3">
+                <RadzenCard>
+                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Vyber dátum:</RadzenText>
+                    <RadzenDatePicker @bind-Value="driver.BirthDate" Name="RadzenDatePickerBindValue" ShowCalendarWeek DateFormat="dd/MM/yyyy" />
+                    <RadzenRequiredValidator Component="RadzenDatePickerBindValue" Text="Vyber dátum!" Popup=@true />
+                </RadzenCard>
+            </div>
+
+            <div class="col-md-2 p-3">
+                <RadzenCard>
+                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Miesto narodenia:</RadzenText>
+                    <RadzenTextBox @bind-Value="driver.PlaceOfBirth" Name="PlaceOfBirth" class="w-100" aria-label="BirthPlaceTextBox" />
+                    <RadzenRequiredValidator Component="PlaceOfBirth" Text="Napíš miesto narodenia!" Popup=@true />
+                </RadzenCard>
+            </div>
+
+            <div class="col-md-4 p-3">
+                <RadzenCard>
+                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Pridaj fotku:</RadzenText>
+                    <BlazorInputFile.InputFile OnChange="HandleFileSelection" name="" id="" />
+                </RadzenCard>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <RadzenStack AlignItems="AlignItems.Center" Class="rz-mx-auto rz-my-2">
+                <RadzenImage Path="@imgSrc" Style="width: 15rem;" AlternateText="@driver.FullName" />
+            </RadzenStack>
+            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center" Gap="3rem" Wrap="FlexWrap.Wrap" class="rz-p-12">
+                <RadzenButton style="width: 160px" Icon="save" BusyText="Saving ..." IsBusy=@busy Text="Save" ButtonType="ButtonType.Submit" />
+            </RadzenStack>
+        </div>
+    </RadzenTemplateForm>
+
+<RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false" FilterMode="FilterMode.Advanced" AllowSorting="true" PageSize="5" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
+                Data="@drivers" ColumnWidth="300px" LogicalFilterOperator="LogicalFilterOperator.Or" SelectionMode="DataGridSelectionMode.Single" @bind-Value=@selectedDrivers>
+    <Columns>
+        <RadzenDataGridColumn Title="Photo" Frozen="true" Sortable="false" Filterable="false" Width="80px" TextAlign="TextAlign.Center">
+            <Template Context="data">
+                <RadzenImage Path="@data.ImageUrl" class="rz-gravatar" AlternateText="@(data.FullName)" />
+            </Template>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn Property="RacingNumber" Title="Racing Number" Width="160px" />
+        <RadzenDataGridColumn Property="FullName" Title="Full name" Frozen="true" Width="160px" />
+        <RadzenDataGridColumn Property="Team" Title="Team" Width="160px" />
+        <RadzenDataGridColumn Property="Country" Title="Country" Width="160px" />
+        <RadzenDataGridColumn Property="Podiums" Title="Podiums" Width="160px" />
+        <RadzenDataGridColumn Property="Points" Title="Points" Width="160px" />
+        <RadzenDataGridColumn Property="GrandPrixEntered" Title="Grand Prix Entered" Width="160px" />
+        <RadzenDataGridColumn Property="WorldChampionships" Title="World Championships" Width="160px" />
+        <RadzenDataGridColumn Property="HighestRaceFinish" Title="Highest Race Finish" Width="160px" />
+        <RadzenDataGridColumn Property="HighestRaceFinishHowManyTimes" Title="Highest Race Finish How Many Times" Width="160px" />
+        <RadzenDataGridColumn Property="BirthDate" Title="Birth Date" FormatString="{0:d}" Width="160px" />
+        <RadzenDataGridColumn Property="PlaceOfBirth" Title="Place of Birth" Width="160px" />
+        @* //add buttons edit and delete for each data *@
+        <RadzenDataGridColumn Title="Action" Sortable="false" Filterable="false" Width="160px" TextAlign="TextAlign.Center">
+            <Template Context="data">
+                <RadzenButton Icon="edit" ButtonType="ButtonType.Button" Click="@(args => Edit(data.Id!))" Style="margin-right: 10px;" />
+                <RadzenButton Icon="delete" ButtonType="ButtonType.Button" Click="@(args => Delete(data.Id!))" />
+            </Template>
+        </RadzenDataGridColumn>
+    </Columns>
+</RadzenDataGrid>
+</div>
+
+
+@code {
+    bool busy;
+    string imgSrc = "";
+    IFileListEntry file = null!;
+    byte[] _fileBytes = null!;
+
+    Driver driver = new Driver();
+    List<Driver> drivers = new List<Driver>();
+    List<FormulaTeam> teams = new List<FormulaTeam>();
+    IEnumerable<Driver> driversEnumerator = null!;
+    IList<Driver> selectedDrivers = null!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        driverService = new DriverService();
+        teams = driverService.GetOtherList();
+        GetDrivers();
+        await Task.CompletedTask;
+    }
+
+    private void GetDrivers()
+    {
+        driverService.GetAllObjects();
+
+        driversEnumerator = driverService.GetAllObjects();
+        selectedDrivers = new List<Driver>() { driversEnumerator.FirstOrDefault()! };
+        drivers = driverService.GetAllObjects();
+    }
+
+    public async Task HandleFileSelection(IFileListEntry[] files)
+    {
+        if (files.Count() > 0)
+        {
+            file = files.FirstOrDefault()!;
+            using (var ms = new MemoryStream())
+            {
+                await file.Data.CopyToAsync(ms);
+                _fileBytes = ms.ToArray();
+                // DriverServiceHandler driverPage = new DriverServiceHandler(driverService);
+                var photo = driverService.ConvertImage(Convert.ToBase64String(_fileBytes));
+                imgSrc = string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(photo));
+            }
+
+        }
+    }
+
+    private async Task Save()
+    {
+        bool notPicked = false;
+
+        if (_fileBytes == null)
+        {
+            //ak sa nenatavil obrazok pouzije sa template z priecinka files v wwwroot
+            notPicked = true;
+            _fileBytes = System.IO.File.ReadAllBytes("wwwroot/files/blank.jpg").ToArray();
+        }
+
+        busy = true;
+        await Task.Delay(2000);
+        // DriverServiceHandler driverPage = new DriverServiceHandler(driverService);
+        if (notPicked)
+        {
+            var photo = driverService.ConvertImage(Convert.ToBase64String(_fileBytes));
+            imgSrc = string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(photo));
+        }
+
+        driverService.SaveOrUpdate(_fileBytes, imgSrc, driver);
+        driver = new Driver();
+        imgSrc = "";
+        _fileBytes = null!;
+        GetDrivers();
+        busy = false;
+    }
+
+    private void Reset()
+    {
+        driver = new Driver();
+    }
+
+    public void Edit(string studentId)
+    {
+        driver = driverService.GetData(studentId);
+        _fileBytes = driver.Photo!;
+        imgSrc = driver.ImageUrl!;
+    }
+
+    public void Delete(string studentId)
+    {
+        //DriverService driverService = new DriverService(MONGO_URL, MONGO_DATABASE, MONGO_THIS_COLLECTION, MONGO_OTHER_COLLECTION);
+        // DriverServiceHandler driverPage = new DriverServiceHandler(driverService);
+        // driverPage.Delete(studentId);
+        driverService.Delete(studentId);
+        driver = new Driver();
+        imgSrc = "";
+        _fileBytes = null!;
+        GetDrivers();
+    }
+}

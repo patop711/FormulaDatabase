@@ -1,0 +1,44 @@
+﻿@page "/driversviewer"
+@using FormulaDatabase.Data
+@using FormulaDatabase.Handler
+@using FormulaDatabase.Service
+@inject FormulaDatabase.Abstracts.Service<Driver, FormulaTeam> driverService
+<title>Drivers viewer</title>
+<h3>DriverEditor</h3>
+
+
+<RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false" FilterMode="FilterMode.Advanced" AllowSorting="true" PageSize="5" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
+                Data="@drivers" ColumnWidth="300px" LogicalFilterOperator="LogicalFilterOperator.Or" SelectionMode="DataGridSelectionMode.Single" @bind-Value=@selectedDrivers>
+    <Columns>
+        <RadzenDataGridColumn Title="Photo" Frozen="true" Sortable="false" Filterable="false" Width="80px" TextAlign="TextAlign.Center">
+            <Template Context="data">
+                <RadzenImage Path="@data.ImageUrl" class="rz-gravatar" AlternateText="@(data.FullName)" />
+            </Template>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn Property="RacingNumber" Title="Racing Number" Width="160px" />
+        <RadzenDataGridColumn Property="FullName" Title="Full name" Frozen="true" Width="160px" />
+        <RadzenDataGridColumn Property="Team" Title="Team" Width="160px" />
+        <RadzenDataGridColumn Property="Country" Title="Country" Width="160px" />
+        <RadzenDataGridColumn Property="Podiums" Title="Podiums" Width="160px" />
+        <RadzenDataGridColumn Property="Points" Title="Points" Width="160px" />
+        <RadzenDataGridColumn Property="GrandPrixEntered" Title="Grand Prix Entered" Width="160px" />
+        <RadzenDataGridColumn Property="WorldChampionships" Title="World Championships" Width="160px" />
+        <RadzenDataGridColumn Property="HighestRaceFinish" Title="Highest Race Finish" Width="160px" />
+        <RadzenDataGridColumn Property="HighestRaceFinishHowManyTimes" Title="Highest Race Finish How Many Times" Width="160px" />
+        <RadzenDataGridColumn Property="BirthDate" Title="Birth Date" FormatString="{0:d}" Width="160px" />
+        <RadzenDataGridColumn Property="PlaceOfBirth" Title="Place of Birth" Width="160px" />
+    </Columns>
+</RadzenDataGrid>
+
+@code {
+    IEnumerable<Driver> drivers = null!;
+    IList<Driver> selectedDrivers = null!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        driverService = new DriverService();
+        drivers = driverService.GetAllObjects();
+        selectedDrivers = new List<Driver>() { drivers.FirstOrDefault()! };
+        await Task.CompletedTask;
+    }
+}

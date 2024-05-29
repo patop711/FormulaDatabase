@@ -1,0 +1,112 @@
+﻿@* Na inšpiraciu mi poslúžila táto stránka https://techcommunity.microsoft.com/t5/web-development/convert-the-standard-blazor-navigation-menu-to-a-collapsible/m-p/3753268 *@
+<div class="top-row ps-3 navbar navbar-dark">
+    <div class="container-fluid">
+        <span class="emojione-v1--racing-car" style="color:white;" aria-hidden="true"></span>
+        @if (!@IconMenuActive)
+        {
+            <a class="navbar-brand" href="">Formula editor</a>
+        }
+        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+</div>
+
+<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+    <nav class="flex-column">
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                <span class="oi oi-home" aria-hidden="true"></span>
+                @if (!@IconMenuActive)
+                {
+                    <label>Home</label>
+                }
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="/deditor">
+                <span class="tdesign--data" aria-hidden="true"></span>
+                @if (!@IconMenuActive)
+                {
+                    <label>Drivers editor</label>
+                }
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="/driversviewer">
+                <span class="carbon--view" aria-hidden="true"></span>
+                @if (!@IconMenuActive)
+                {
+                    <label>Drivers viewer</label>
+                }
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="/teditor">
+                <span class="tdesign--data" aria-hidden="true"></span>
+                @if (!@IconMenuActive)
+                {
+                    <label>Teams editor</label>
+                }
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="/teamsviewer">
+                <span class="carbon--view" aria-hidden="true"></span>
+                @if (!@IconMenuActive)
+                {
+                    <label>Teams viewer</label>
+                }
+            </NavLink>
+        </div>
+    </nav>
+</div>
+
+<div class="bottom-row">
+    <div class="icon-menu-arrow">
+        @if (!@IconMenuActive)
+        {
+            <span class="oi oi-arrow-left" style="color: white;" @onclick="ToggleIconMenu"></span>
+        }
+        else
+        {
+            <span class="oi oi-arrow-right" style="color: white;" @onclick="ToggleIconMenu"></span>
+        }
+    </div>
+</div>
+
+@* @code {
+    private bool collapseNavMenu = true;
+
+    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+} *@
+
+@code {
+    //bool to send to MainLayout for shrinking sidebar and showing/hide menu text
+    private bool IconMenuActive { get; set; } = false;
+
+    //EventCallback for sending bool to MainLayout
+    [Parameter]
+    public EventCallback<bool> ShowIconMenu { get; set; }
+
+    private bool collapseNavMenu = true;
+
+    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+
+    //Method to toggle IconMenuActive bool and send bool via EventCallback
+    private async Task ToggleIconMenu()
+    {
+        IconMenuActive = !IconMenuActive;
+        await ShowIconMenu.InvokeAsync(IconMenuActive);
+    }
+}
