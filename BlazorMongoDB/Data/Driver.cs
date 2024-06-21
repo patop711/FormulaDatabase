@@ -6,6 +6,9 @@ using System.ComponentModel;
 
 namespace FormulaDatabase.Data
 {
+    /// <summary>
+    /// Trieda Driver pre databázu
+    /// </summary>
     public class Driver
     {
         [BsonId]

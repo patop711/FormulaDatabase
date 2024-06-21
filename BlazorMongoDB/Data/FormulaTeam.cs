@@ -4,6 +4,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FormulaDatabase.Data
 {
+    /// <summary>
+    /// Treida FormulaTeam pre databázu
+    /// </summary>
     public class FormulaTeam
     {
 		public byte[]? Photo { get; set; }

@@ -28,7 +28,7 @@
                 <span class="tdesign--data" aria-hidden="true"></span>
                 @if (!@IconMenuActive)
                 {
-                    <label>Drivers editor</label>
+                    <label>D-editor</label>
                 }
             </NavLink>
         </div>
@@ -37,7 +37,7 @@
                 <span class="carbon--view" aria-hidden="true"></span>
                 @if (!@IconMenuActive)
                 {
-                    <label>Drivers viewer</label>
+                    <label>D-viewer</label>
                 }
             </NavLink>
         </div>
@@ -46,7 +46,7 @@
                 <span class="tdesign--data" aria-hidden="true"></span>
                 @if (!@IconMenuActive)
                 {
-                    <label>Teams editor</label>
+                    <label>T-editor</label>
                 }
             </NavLink>
         </div>
@@ -55,7 +55,7 @@
                 <span class="carbon--view" aria-hidden="true"></span>
                 @if (!@IconMenuActive)
                 {
-                    <label>Teams viewer</label>
+                    <label>T-viewer</label>
                 }
             </NavLink>
         </div>
@@ -74,17 +74,6 @@
         }
     </div>
 </div>
-
-@* @code {
-    private bool collapseNavMenu = true;
-
-    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-
-    private void ToggleNavMenu()
-    {
-        collapseNavMenu = !collapseNavMenu;
-    }
-} *@
 
 @code {
     //bool to send to MainLayout for shrinking sidebar and showing/hide menu text

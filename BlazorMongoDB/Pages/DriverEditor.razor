@@ -1,9 +1,7 @@
 @page "/deditor"
 @using FormulaDatabase.Data
-@using FormulaDatabase.Handler
 @using FormulaDatabase.Service
 @using FormulaDatabase.Abstracts
-@* @inject FormulaDatabase.IService.IService<Driver, FormulaTeam> driverService *@
 @inject FormulaDatabase.Abstracts.Service<Driver, FormulaTeam> driverService
 <title>Driver editor</title>
 <h3>Driver editor</h3>
@@ -204,7 +202,6 @@
             {
                 await file.Data.CopyToAsync(ms);
                 _fileBytes = ms.ToArray();
-                // DriverServiceHandler driverPage = new DriverServiceHandler(driverService);
                 var photo = driverService.ConvertImage(Convert.ToBase64String(_fileBytes));
                 imgSrc = string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(photo));
             }
